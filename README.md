@@ -4,7 +4,7 @@ If for some reason you want to run this project you find the setup below.
 
 ## Setup
 - Make sure you have [Python 3.10+](https://www.python.org/downloads/) installed
-- Clone this repository and open the folder of it in command prompt
+- Clone this repository
 - Open the `setup.bat` found in the project files
 - After running the `setup.bat` run the `start.bat`
 - If you still have issues ask ChatGPT :P
