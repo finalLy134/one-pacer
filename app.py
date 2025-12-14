@@ -1,3 +1,4 @@
+import math
 import api
 import utils
 
@@ -26,21 +27,47 @@ for index, key in enumerate(questions.keys()):
 
 if not stopped:
   real_data, one_pace, per_day, current, fillers, openings, endings, speed = (
-    answers.get(key) for key in ['real_data', 'one_pace', 'per_day', 'current', 'fillers', 'openings', 'endings', 'speed']
+    answers.get(key)
+    for key in [
+      'real_data',
+      'one_pace',
+      'per_day',
+      'current',
+      'fillers',
+      'openings',
+      'endings',
+      'speed'
+    ]
   )
 
   utils.clear()
   print(drawing)
-  print("Calculating it for you...\n\n")
+  print("Calculating it for you...\n")
 
   episode_count, filler_count = api.get_episodes(real_data, one_pace)
+
   remaining = episode_count - current
   if not fillers:
     remaining -= filler_count
-  time_remaining = remaining * api.get_episode_length(one_pace, openings, endings, speed)
 
-  days = int(time_remaining // 1440)
-  hours = int((time_remaining % 1440) // 60)
-  minutes = int(time_remaining % 60)
+  episode_minutes = api.get_episode_length(
+    one_pace, openings, endings, speed
+  )
 
-  print(f"It will take you approximately {days} days, {hours} hours and {minutes} minutes to finish One Piece.")
+  total_minutes = remaining * episode_minutes
+
+  total_days_time = int(total_minutes // 1440)
+  total_hours = int((total_minutes % 1440) // 60)
+  total_minutes_left = int(total_minutes % 60)
+
+  minutes_per_day = per_day * episode_minutes
+
+  calendar_days = math.ceil(total_minutes / minutes_per_day)
+
+  print(
+    f"You will finish in ~{calendar_days} calendar days "
+    f"watching {per_day} episode(s) per day.\n\n"
+    f"Daily watch time: ~{minutes_per_day:.1f} minutes/day\n"
+    f"Total watch time: "
+    f"{total_days_time}d {total_hours}h {total_minutes_left}m."
+  )
